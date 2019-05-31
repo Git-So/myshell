@@ -1,0 +1,2 @@
+0 */2 * * * $HOME/Documents/myshell/shell/Task/backup/backup.sh
+15 */6 * * * $HOME/Documents/myshell/shell/Task/mirrors/mirrors.sh

@@ -20,7 +20,7 @@ export MYSHELL_MYIP_CONF=$(cat ${MYSHELL_MYIP_PATH}/conf.json)
 # 参数 $1 判断值
 # 成功返回 1,否则为 0
 IsKey() {
-    if [[ $(echo $1 | grep -w -c "^[0-9]\+$") -gt 0 ]] ;then
+    if [[ $(echo "$1" | grep -w -c "^[0-9]\+$") -ne 0 ]] ;then
         echo 1
     else
         echo 0
@@ -32,7 +32,7 @@ IsKey() {
 # 成功返回 json 配置,失败返回 空
 GetConf() {
     # 无效键值获取默认配置,合法键值对应配置
-    if [[ $(IsKey $1) -eq 1 ]] ;then
+    if [[ $(IsKey "$1") -eq 1 ]] ;then
         # 配置长度
         local len=$(echo ${MYSHELL_MYIP_CONF} | jq "length")
 
@@ -45,7 +45,7 @@ GetConf() {
         fi
     else
         # 显示默认配置
-        echo ${MYSHELL_MYIP_CONF} | jq "map( select( . | .default=true ) ) | .[0]"
+        echo ${MYSHELL_MYIP_CONF} | jq "map( select( . | .default==true ) ) | .[0]"
     fi
 }
 
@@ -83,11 +83,11 @@ GetIP() {
         # data
         local response=""
         if [[ "${method}" == "POST" ]] ;then
-            response=$(curl -s –connect-timeout $timeout -m $timeout -d "${data}" "${url}" )
+            response="$(curl -s -m $timeout -d "${data}" "${url}" )"
         else
             data=$(echo $data | sed s/\&/\\\\\\\\\&/g)
             url=$(echo $url | sed s/\${GET}/$data/g)
-            response=$(curl -s –connect-timeout $timeout -m $timeout "${url}" )
+            response="$(curl -s -m $timeout "${url}")"
         fi
 
         # coding

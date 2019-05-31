@@ -59,7 +59,7 @@
   {
     "name": "淘宝",
     "speed": 461,
-    "default": false,
+    "default": true,
     "current": {
       "url": "http://ip.taobao.com/service/getIpInfo.php?ip=${GET}",
       "method": "GET",
@@ -135,20 +135,20 @@
   {
     "name": "太平洋网络",
     "speed": 5900,
-    "default": true,
+    "default": false,
     "current": {
       "url": "http://whois.pconline.com.cn/ipJson.jsp?json=true",
       "method": "GET",
       "data": "",
       "dataType": "json",
-      "coding": "GBK"
+      "coding": "gbk"
     },
     "custom": {
       "url": "http://whois.pconline.com.cn/ipJson.jsp?json=true&${GET}",
       "method": "POST",
       "data": "ip=${IP}",
       "dataType": "json",
-      "coding": "GBK"
+      "coding": "gbk"
     }
   },
   {

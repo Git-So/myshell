@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # 根目录
-rootPath="/run/media/Disk/Backup"
+rootPath="/media/Disk/Backup"
 
 # 目录备份
 bakPath="${rootPath}/workspace"
