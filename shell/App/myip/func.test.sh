@@ -3,7 +3,7 @@
 set -eo pipefail
 
 # 脚本路径
-export MYSHELL_MYIP_PATH="$(dirname $(readlink -f $0))"
+export MYSHELL_MYIP_PATH="$MYSHELL/shell/App/myip"
 
 # 加载调试文件
 . ${MYSHELL_MYIP_PATH}/func.sh

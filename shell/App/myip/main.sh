@@ -6,10 +6,10 @@ set -eo pipefail
 # 构造函数
 start() {
     # 脚本路径
-    export MYSHELL_MYIP_PATH="$(dirname $(readlink -f $0))"
+    export MYSHELL_MYIP_PATH="$MYSHELL/shell/App/myip"
 
     # 操作ID
-    export MYSHELL_MYIP_ID=$(echo $[$(date +%s%N)/1000000])
+    export MYSHELL_MYIP_ID=$(echo $[$(date +%s)/1000000])
 
     # 引入函数
     . "${MYSHELL_MYIP_PATH}/func.sh"
