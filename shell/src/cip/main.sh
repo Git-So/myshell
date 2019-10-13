@@ -5,20 +5,19 @@ IFS=$'\n\t'
 # const
 readonly CIP_PATH=$(dirname "$(readlink -f "$0")")
 
-readonly WARN_IGNORE_ID_ARG='忽略ID参数'
-readonly WARN_IGNORE_TYPE_ARG='忽略类型参数'
-readonly ERR_INVALID_ID='无效ID参数'
-readonly ERR_INVALID_TYPE='无效类型参数'
-readonly ERR_INVALID_ARGS='无效类型参数'
+readonly WARN_IGNORE_NUM_ARG='忽略后面编号选择参数,同时存在多个 -n -t 参数'
+readonly WARN_IGNORE_TYPE_ARG='忽略后面类型选择参数,同时存在多个 -n -t 参数'
+readonly ERR_INVALID_NUM='无效编号选择参数,检查 -n 参数'
+readonly ERR_INVALID_TYPE='无效类型选择参数,检查 -t 参数'
+readonly ERR_INVALID_ARGS='存在无法识别参数,使用 -h 查看帮助'
 readonly ERR_CIP_FAIL='获取IP失败'
-readonly ERR_INVALID_IPV4='无效IP参数'
+readonly ERR_INVALID_IPV4='无效IP参数,检查 -i 参数'
 
 readonly CIP_TYPES=(pconline ip-api cip ipapi ipsb)
 
 # var
 CIP_IP=""
 CIP_Type=""
-CIP_Id=""
 CIP_Default_Type=${CIP_TYPES[0]}
 
 # shellcheck source=../common/core.sh
@@ -37,7 +36,7 @@ usage() {
     echo '  -h                    显示帮助'
     echo '  -l                    显示列表'
     echo '  -i   [ip]             指定查询IP'
-    echo '  -n   [id]             用ID选择源'
+    echo '  -n   [num]            用编号选择源'
     echo '  -t   [type]           用类型名称选择源'
     echo
     echo '注：不使用IP参数显示本机IP'
@@ -76,26 +75,26 @@ main() {
             exit
             ;;
         n)
-            # ID 选择源
+            # 编号选择源
             [[ -n $CIP_Type ]] &&
-                Warn $WARN_IGNORE_ID_ARG &&
+                Warn "$WARN_IGNORE_NUM_ARG" &&
                 continue
 
             ! isNumber "$OPTARG" &&
                 [[ $OPTARG -gt ${#CIP_TYPES[@]} ]] &&
-                IfErr $ERR_INVALID_ID
+                IfErr "$ERR_INVALID_NUM"
 
             ((OPTARG--))
             CIP_Type=${CIP_TYPES[OPTARG]}
             ;;
         t)
             # 按类型选择短网址
-            [[ -n $CIP_Id ]] &&
-                Warn $WARN_IGNORE_TYPE_ARG &&
+            [[ -n $CIP_Type ]] &&
+                Warn "$WARN_IGNORE_TYPE_ARG" &&
                 continue
 
             [[ ! "${CIP_TYPES[*]}" =~ (^|[^0-z\-])"$OPTARG"([^0-z\-]|$) ]] &&
-                IfErr $ERR_INVALID_TYPE
+                IfErr "$ERR_INVALID_TYPE"
 
             CIP_Type=$OPTARG
             ;;
@@ -107,7 +106,7 @@ main() {
             CIP_IP=$OPTARG
             ;;
         ?)
-            IfErr $ERR_INVALID_ARGS
+            IfErr "$ERR_INVALID_ARGS"
             ;;
         esac
     done

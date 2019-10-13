@@ -5,9 +5,9 @@ IFS=$'\n\t'
 # const
 readonly SURL_PATH=$(dirname "$(readlink -f "$0")")
 
-readonly WARN_IGNORE_ID_ARG='忽略后面ID选择参数,同时存在多个 -n -t 参数'
+readonly WARN_IGNORE_NUM_ARG='忽略后面编号选择参数,同时存在多个 -n -t 参数'
 readonly WARN_IGNORE_TYPE_ARG='忽略后面类型选择参数,同时存在多个 -n -t 参数'
-readonly ERR_INVALID_ID='无效编号选择参数,检查 -n 参数'
+readonly ERR_INVALID_NUM='无效编号选择参数,检查 -n 参数'
 readonly ERR_INVALID_TYPE='无效类型选择参数,检查 -t 参数'
 readonly ERR_INVALID_ARGS='存在无法识别参数,使用 -h 查看帮助'
 readonly ERR_SURL_FAIL='缩短网址失败'
@@ -36,7 +36,7 @@ usage() {
     echo '  -h                    显示帮助'
     echo '  -l                    显示列表'
     echo '  -u   [url]            长网址'
-    echo '  -n   [id]             用ID选择源'
+    echo '  -n   [num]            用编号选择源'
     echo '  -t   [type]           用类型名称选择源'
     echo
 
@@ -75,14 +75,14 @@ main() {
             exit
             ;;
         n)
-            # ID 选择源
+            # 编号选择源
             [[ -n $SURL_Type ]] &&
-                Warn "$WARN_IGNORE_ID_ARG" &&
+                Warn "$WARN_IGNORE_NUM_ARG" &&
                 continue
 
             ! isNumber "$OPTARG" &&
                 [[ $OPTARG -gt ${#SURL_TYPES[@]} ]] &&
-                IfErr "$ERR_INVALID_ID"
+                IfErr "$ERR_INVALID_NUM"
 
             ((OPTARG--))
             SURL_Type=${SURL_TYPES[OPTARG]}
